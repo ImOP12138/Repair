@@ -145,6 +145,13 @@ module.exports = {
         { mark: 'img', type: 'image', title: '相关图片', max: 8 },
     ],
 
+    TASK_QUOTE_FIELDS: [
+        { mark: 'chargeDesc', title: '收费情况说明', type: 'textarea', must: true },
+        { mark: 'chargeAmount', title: '收费金额(元)', type: 'digit', must: true },
+        { mark: 'content', title: '情况说明', type: 'textarea', must: false },
+        { mark: 'img', type: 'image', title: '相关图片', max: 8 },
+    ],
+
     TASK_RUN_FIELDS: [
         { mark: 'content', title: '情况说明', type: 'textarea', must: false },
         { mark: 'img', type: 'image', title: '相关图片', max: 8 },

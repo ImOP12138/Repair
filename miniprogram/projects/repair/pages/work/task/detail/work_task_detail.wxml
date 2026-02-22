@@ -5,4 +5,16 @@
 
 	<include src="../../../admin/task/detail/task_detail_inc.wxml" /> 
 
+	<view class="btn-bottom-task">
+		<view wx:if="{{task.TASK_STATUS==1}}">
+			<button bindtap="url" data-url="../quote/work_task_quote?id={{id}}" class="btn-work margin-top">提交报价</button>
+		</view>
+		<view wx:if="{{task.TASK_STATUS==3}}">
+			<button bindtap="url" data-url="../over/work_task_over?id={{id}}" class="btn-work margin-top">设为完成</button>
+		</view>
+		<view wx:if="{{task.TASK_STATUS==2}}">
+			<button class="btn-work margin-top bg-grey" disabled>等待用户确认报价</button>
+		</view>
+	</view>
+
 </block>

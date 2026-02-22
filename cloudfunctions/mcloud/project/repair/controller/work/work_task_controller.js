@@ -70,6 +70,25 @@ class WorkTaskController extends BaseProjectWorkController {
 		return result;
 	}
 
+	async quoteWorkTask() {
+		await this.isWork();
+
+		// 数据校验
+		let rules = {
+			id: 'must|id',
+			forms: 'array|name=表单',
+		};
+
+		// 取得数据
+		let input = this.validateData(rules);
+
+		// 内容审核
+		await contentCheck.checkTextMultiAdmin(input);
+
+		let service = new WorkTaskService();
+		return await service.quoteWorkTask(input.id, input.forms);
+	}
+
 	async runWorkTask() {
 		await this.isWork();
 
@@ -138,6 +157,25 @@ class WorkTaskController extends BaseProjectWorkController {
 
 		let service = new TaskService();
 		return await service.updateTaskForms(input, 'TASK_OVER_FORMS', 'TASK_OVER_OBJ');
+	}
+
+	async updateWorkQuoteTaskForms() {
+		await this.isWork();
+
+		// 数据校验
+		let rules = {
+			id: 'must|id',
+			hasImageForms: 'array'
+		};
+
+		// 取得数据
+		let input = this.validateData(rules);
+
+		// 内容审核
+		await contentCheck.checkTextMultiAdmin(input);
+
+		let service = new TaskService();
+		return await service.updateTaskForms(input, 'TASK_QUOTE_FORMS', 'TASK_QUOTE_OBJ');
 	}
 }
 

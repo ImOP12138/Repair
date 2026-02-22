@@ -44,7 +44,38 @@ class TaskService extends BaseProjectService {
 			);
 		}
 
-		if (task.TASK_STATUS >= TaskModel.STATUS.RUN)
+		if (task.TASK_STATUS >= TaskModel.STATUS.QUOTE && task.TASK_QUOTE_TIME > 0) {
+			let quoteContent = '';
+			if (task.TASK_QUOTE_OBJ.chargeDesc) {
+				quoteContent += '收费情况：' + task.TASK_QUOTE_OBJ.chargeDesc + '\n';
+			}
+			if (task.TASK_QUOTE_OBJ.chargeAmount) {
+				quoteContent += '收费金额：' + task.TASK_QUOTE_OBJ.chargeAmount + '元\n';
+			}
+			if (task.TASK_QUOTE_OBJ.content) {
+				quoteContent += task.TASK_QUOTE_OBJ.content;
+			}
+			
+			let confirmDesc = '';
+			if (task.TASK_QUOTE_CONFIRM === TaskModel.QUOTE_CONFIRM.CONFIRMED) {
+				confirmDesc = '（用户已确认）';
+			} else if (task.TASK_QUOTE_CONFIRM === TaskModel.QUOTE_CONFIRM.CANCELLED) {
+				confirmDesc = '（用户已取消）';
+			} else {
+				confirmDesc = '（待用户确认）';
+			}
+			
+			taskLogList.push(
+				{
+					desc: '[' + task.TASK_MEMBER_CATE_NAME + '] ' + task.TASK_MEMBER_NAME + ' 提交报价' + confirmDesc,
+					time: timeUtil.timestamp2Time(task.TASK_QUOTE_TIME, 'Y-M-D h:m'),
+					content: quoteContent,
+					img: task.TASK_QUOTE_OBJ.img || [],
+				}
+			);
+		}
+
+		if (task.TASK_STATUS >= TaskModel.STATUS.RUN && task.TASK_RUN_TIME > 0)
 			taskLogList.push(
 				{
 					desc: '[' + task.TASK_MEMBER_CATE_NAME + '] ' + task.TASK_MEMBER_NAME + ' 开始处理',
@@ -70,12 +101,16 @@ class TaskService extends BaseProjectService {
 		let status0Cnt = await TaskModel.count({ TASK_STATUS: 0, TASK_USER_MOBILE: userId });
 		let status1Cnt = await TaskModel.count({ TASK_STATUS: 1, TASK_USER_MOBILE: userId });
 		let status2Cnt = await TaskModel.count({ TASK_STATUS: 2, TASK_USER_MOBILE: userId });
+		let status3Cnt = await TaskModel.count({ TASK_STATUS: 3, TASK_USER_MOBILE: userId });
 		let status9Cnt = await TaskModel.count({ TASK_STATUS: 9, TASK_USER_MOBILE: userId });
+		let status10Cnt = await TaskModel.count({ TASK_STATUS: 10, TASK_USER_MOBILE: userId });
 		let task = {
 			status0Cnt,
 			status1Cnt,
 			status2Cnt,
-			status9Cnt
+			status3Cnt,
+			status9Cnt,
+			status10Cnt
 		}
 		return task;
 	}
@@ -140,6 +175,27 @@ class TaskService extends BaseProjectService {
 		};
 		if (!isAdmin) where.TASK_USER_MOBILE = userId;
 		await TaskModel.del(where);
+	}
+
+	async confirmQuote(id) {
+		let where = {
+			_id: id
+		};
+		let data = {};
+		data.TASK_QUOTE_CONFIRM = TaskModel.QUOTE_CONFIRM.CONFIRMED;
+		data.TASK_STATUS = TaskModel.STATUS.RUN;
+		data.TASK_RUN_TIME = timeUtil.time();
+		await TaskModel.edit(where, data);
+	}
+
+	async cancelQuote(id) {
+		let where = {
+			_id: id
+		};
+		let data = {};
+		data.TASK_QUOTE_CONFIRM = TaskModel.QUOTE_CONFIRM.CANCELLED;
+		data.TASK_STATUS = TaskModel.STATUS.CANCEL;
+		await TaskModel.edit(where, data);
 	}
 
 	async commentTask(id, forms) {

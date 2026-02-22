@@ -23,7 +23,7 @@ TaskModel.DB_STRUCTURE = {
 	TASK_USER_ID: 'string|false|comment=用户ID',
 	TASK_USER_MOBILE: 'string|false|comment=用户手机号',
 
-	TASK_STATUS: 'int|true|default=0|comment=状态 0=待派工,1=已派工,2=待处理, 9=已完成',
+	TASK_STATUS: 'int|true|default=0|comment=状态 0=待派工,1=已派工,2=待用户确认,3=处理中,9=已完成,10=已取消',
       
 	TASK_FORMS: 'array|true|default=[]', 
 	TASK_OBJ: 'object|true|default={}', 
@@ -35,6 +35,11 @@ TaskModel.DB_STRUCTURE = {
 	TASK_MEMBER_CATE_ID: 'string|false|comment=工作人员分类ID',
 	TASK_MEMBER_TIME: 'int|true|default=0|comment=工作人员派工时间',
 
+
+	TASK_QUOTE_FORMS: 'array|true|default=[]|comment=报价表单',
+	TASK_QUOTE_OBJ: 'object|true|default={}|comment=报价对象',
+	TASK_QUOTE_TIME: 'int|true|default=0|comment=报价时间',
+	TASK_QUOTE_CONFIRM: 'int|true|default=0|comment=报价确认状态 0=待确认,1=已确认,2=已取消',
 
 	TASK_RUN_FORMS: 'array|true|default=[]',
 	TASK_RUN_OBJ: 'object|true|default={}',
@@ -63,20 +68,30 @@ TaskModel.DB_STRUCTURE = {
 TaskModel.FIELD_PREFIX = "TASK_";
 
 /**
- * 状态 0=待处理,1=处理中 9=已完成
+ * 状态 0=待派工,1=已派工,2=待用户确认,3=处理中,9=已完成,10=已取消
  */
 TaskModel.STATUS = {
 	WAIT: 0,
 	APPT: 1,
-	RUN: 2,
-	OVER: 9
+	QUOTE: 2,
+	RUN: 3,
+	OVER: 9,
+	CANCEL: 10
 };
 
 TaskModel.STATUS_DESC = {
 	WAIT: '待派工',
 	APPT: '已派工',
+	QUOTE: '待用户确认',
 	RUN: '处理中',
 	OVER: '已完成',
+	CANCEL: '已取消'
+};
+
+TaskModel.QUOTE_CONFIRM = {
+	PENDING: 0,
+	CONFIRMED: 1,
+	CANCELLED: 2
 };
 
 

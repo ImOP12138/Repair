@@ -17,18 +17,19 @@ class BaseController {
 	constructor(route, openId, event) {
 
 		this._route = route; // 路由
-		this._openId = openId; //用户身份
+		this._openId = openId || ''; //用户身份
 		this._event = event; // 所有参数   
 		this._request = event.params; //数据参数
 
-		if (!openId) {
+		// 自动登录检查接口允许无openId
+		if (!openId && route !== 'passport/auto_login_check') {
 			console.error('OPENID is unfined');
 			throw new AppError('OPENID is unfined', appCode.SVR);
 		}
 
 		this._token = event.token || '';
 		
-		let userId = this._token || openId;
+		let userId = this._token || openId || '';
 
 		this._userId = userId;
 

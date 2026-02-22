@@ -717,5 +717,211 @@ ADMIN_CHECK_CONTENT: false,   // 后台图片文字校验
 
 ---
 
+### 11. 维修报价确认流程 ⭐⭐⭐
+**改动说明**: 新增维修报价提交和用户确认流程，用户确认报价后才进入处理中状态
+
+#### 11.1 数据库模型扩展
+**文件**: `cloudfunctions/mcloud/project/repair/model/task_model.js`
+
+新增字段：
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `TASK_QUOTE_FORMS` | array | 报价表单 |
+| `TASK_QUOTE_OBJ` | object | 报价对象 |
+| `TASK_QUOTE_TIME` | int | 报价时间 |
+| `TASK_QUOTE_CONFIRM` | int | 报价确认状态(0=待确认,1=已确认,2=已取消) |
+
+状态调整：
+| 状态码 | 原含义 | 新含义 |
+|--------|--------|--------|
+| 0 | 待派工 | 待派工 |
+| 1 | 已派工 | 已派工 |
+| 2 | 处理中 | 待用户确认报价 |
+| 3 | - | 处理中 |
+| 9 | 已完成 | 已完成 |
+| 10 | - | 已取消 |
+
+#### 11.2 报价表单配置
+**文件**: `miniprogram/projects/repair/public/project_setting.js`
+
+新增 `TASK_QUOTE_FIELDS` 配置：
+```javascript
+TASK_QUOTE_FIELDS: [
+    { mark: 'chargeDesc', title: '收费情况说明', type: 'textarea', must: true },
+    { mark: 'chargeAmount', title: '收费金额(元)', type: 'digit', must: true },
+    { mark: 'content', title: '情况说明', type: 'textarea', must: false },
+    { mark: 'img', type: 'image', title: '相关图片', max: 8 },
+],
+```
+
+#### 11.3 后端服务层新增方法
+**文件**: `cloudfunctions/mcloud/project/repair/service/work/work_task_service.js`
+
+| 方法 | 说明 |
+|------|------|
+| `quoteWorkTask` | 维修人员提交报价 |
+
+**文件**: `cloudfunctions/mcloud/project/repair/service/task_service.js`
+
+| 方法 | 说明 |
+|------|------|
+| `confirmQuote` | 用户确认报价，状态变为处理中 |
+| `cancelQuote` | 用户取消报价，状态变为已取消 |
+
+#### 11.4 后端控制器新增接口
+**文件**: `cloudfunctions/mcloud/project/repair/controller/work/work_task_controller.js`
+
+| 接口 | 说明 |
+|------|------|
+| `quoteWorkTask` | 提交报价 |
+| `updateWorkQuoteTaskForms` | 更新报价表单图片 |
+
+**文件**: `cloudfunctions/mcloud/project/repair/controller/task_controller.js`
+
+| 接口 | 说明 |
+|------|------|
+| `confirmQuote` | 用户确认报价 |
+| `cancelQuote` | 用户取消报价 |
+
+#### 11.5 路由配置
+**文件**: `cloudfunctions/mcloud/project/repair/public/route.js`
+
+新增路由：
+```javascript
+'work/task_quote': 'work/work_task_controller@quoteWorkTask',
+'work/task_update_quote_forms': 'work/work_task_controller@updateWorkQuoteTaskForms',
+'task/confirm_quote': 'task_controller@confirmQuote',
+'task/cancel_quote': 'task_controller@cancelQuote',
+```
+
+#### 11.6 维修人员端改造
+**新增报价页面**:
+- `miniprogram/projects/repair/pages/work/task/quote/work_task_quote.js`
+- `miniprogram/projects/repair/pages/work/task/quote/work_task_quote.json`
+- `miniprogram/projects/repair/pages/work/task/quote/work_task_quote.wxml`
+- `miniprogram/projects/repair/pages/work/task/quote/work_task_quote.wxss`
+
+**工单列表筛选菜单更新**:
+- 全部
+- 待处理 (状态1)
+- 待确认 (状态2) ← 新增
+- 处理中 (状态3)
+- 已完成 (状态9)
+
+**工单详情页操作按钮**:
+- 状态1：显示"提交报价"按钮
+- 状态2：显示"等待用户确认报价"（禁用状态）
+- 状态3：显示"设为完成"按钮
+
+#### 11.7 用户端改造
+**工单列表状态显示**:
+- 新增"待您确认报价"状态（黄色标签）
+- 新增"已取消"状态（灰色标签）
+
+**工单详情页**:
+- 状态2时显示报价信息卡片（收费情况说明、收费金额、其他说明、相关图片）
+- 状态2时显示"确认维修"和"取消维修"按钮
+- 状态>=2时显示报价信息
+- 状态>=3时显示维修完成信息
+
+**筛选菜单更新**:
+- 全部
+- 待派工
+- 已派工待处理
+- 待确认报价 ← 新增
+- 处理中
+- 已完成
+- 已取消 ← 新增
+
+#### 11.8 处理流程日志更新
+**文件**: `cloudfunctions/mcloud/project/repair/service/task_service.js`
+
+`getTaskLogList` 方法新增报价记录显示：
+- 显示收费情况说明
+- 显示收费金额
+- 显示确认状态（待用户确认/用户已确认/用户已取消）
+
+#### 11.9 工单统计更新
+**文件**: `cloudfunctions/mcloud/project/repair/service/task_service.js`
+
+`getTaskCountByType` 方法新增状态10（已取消）的统计。
+
+---
+
+## 改动文件清单
+
+| 序号 | 文件路径 | 改动内容 |
+|------|----------|----------|
+| 1 | `cloudfunctions/mcloud/project/repair/service/base_project_service.js` | 管理员密码MD5值 |
+| 2 | `cloudfunctions/mcloud/project/repair/service/admin/admin_member_service.js` | 实现工作人员管理功能 |
+| 3 | `cloudfunctions/mcloud/project/repair/controller/admin/admin_member_controller.js` | 修复cateId校验规则 |
+| 4 | `miniprogram/projects/repair/biz/admin_member_biz.js` | 修复cateId校验规则 |
+| 5 | `miniprogram/app.json` | 小程序名称、新增服务详情页路径、新增报价页面路径 |
+| 6 | `miniprogram/projects/repair/public/project_setting.js` | 工作人员分类、服务商品配置、报价表单配置 |
+| 7 | `miniprogram/projects/repair/pages/default/index/default_index.wxml` | 首页布局改造 |
+| 8 | `miniprogram/projects/repair/pages/default/index/default_index.wxss` | 首页样式改造 |
+| 9 | `miniprogram/projects/repair/pages/default/index/default_index.js` | 首页逻辑改造 |
+| 10 | `miniprogram/projects/repair/pages/service/detail/service_detail.js` | 新增服务详情页逻辑 |
+| 11 | `miniprogram/projects/repair/pages/service/detail/service_detail.json` | 新增服务详情页配置 |
+| 12 | `miniprogram/projects/repair/pages/service/detail/service_detail.wxml` | 新增服务详情页模板 |
+| 13 | `miniprogram/projects/repair/pages/service/detail/service_detail.wxss` | 新增服务详情页样式 |
+| 14 | `miniprogram/projects/repair/pages/task/add/task_add.js` | 报修页面自动填充报修类型 |
+| 15 | `miniprogram/projects/repair/pages/task/add/task_add.wxml` | 报修页面表单绑定修改 |
+| 16 | `miniprogram/cmpts/public/form/form_show/form_show_cmpt.wxml` | 表单组件支持只读字段 |
+| 17 | `miniprogram/cmpts/public/form/form_show/form_show_cmpt.wxss` | 只读字段样式 |
+| 18 | `cloudfunctions/mcloud/project/repair/service/task_service.js` | 实现报修工单CRUD功能、报价确认/取消、流程日志更新、统计更新 |
+| 19 | `cloudfunctions/mcloud/project/repair/service/admin/admin_task_service.js` | 实现派工、状态修改、数据导出 |
+| 20 | `cloudfunctions/mcloud/project/repair/service/work/work_task_service.js` | 实现工作人员处理工单功能、提交报价 |
+| 21 | `cloudfunctions/mcloud/project/repair/service/work/work_home_service.js` | 实现工作人员修改密码 |
+| 22 | `cloudfunctions/mcloud/project/repair/service/admin/admin_user_service.js` | 实现用户管理、数据导出 |
+| 23 | `cloudfunctions/mcloud/project/repair/service/admin/admin_news_service.js` | 实现资讯管理完整功能 |
+| 24 | `cloudfunctions/mcloud/project/repair/service/admin/admin_mgr_service.js` | 实现管理员管理完整功能 |
+| 25 | `miniprogram/projects/repair/pages/my/index/my_index.js` | 隐藏后台入口，改为连续点击5次触发 |
+| 26 | `miniprogram/projects/repair/pages/my/index/my_index.wxml` | 移除公开的后台管理入口 |
+| 27 | `miniprogram/projects/repair/pages/work/index/home/work_home.js` | 修复退出登录时下拉刷新报错 |
+| 28 | `cloudfunctions/mcloud/project/repair/model/user_model.js` | 新增密码字段 |
+| 29 | `cloudfunctions/mcloud/project/repair/model/sms_code_model.js` | 新增短信验证码模型 |
+| 30 | `cloudfunctions/mcloud/project/repair/service/passport_service.js` | 新增多种登录方式 |
+| 31 | `cloudfunctions/mcloud/project/repair/controller/passport_controller.js` | 新增登录接口 |
+| 32 | `cloudfunctions/mcloud/project/repair/public/route.js` | 新增路由（报价、确认、取消） |
+| 33 | `miniprogram/projects/repair/pages/my/login/my_login.js` | 新增登录页面逻辑 |
+| 34 | `miniprogram/projects/repair/pages/my/login/my_login.json` | 新增登录页面配置 |
+| 35 | `miniprogram/projects/repair/pages/my/login/my_login.wxml` | 新增登录页面模板 |
+| 36 | `miniprogram/projects/repair/pages/my/login/my_login.wxss` | 新增登录页面样式 |
+| 37 | `miniprogram/projects/repair/pages/my/index/my_index.js` | 切换账号/退出登录功能 |
+| 38 | `miniprogram/projects/repair/pages/my/index/my_index.wxml` | 切换账号/退出登录入口 |
+| 39 | `miniprogram/comm/constants.js` | 新增退出登录标记 |
+| 40 | `miniprogram/comm/biz/passport_biz.js` | 新增登录方法 |
+| 41 | `miniprogram/app.js` | 退出登录检测、废弃API修复、多账号支持 |
+| 42 | `miniprogram/projects/repair/pages/my/password/my_password.js` | 新增设置密码页面逻辑 |
+| 43 | `miniprogram/projects/repair/pages/my/password/my_password.json` | 新增设置密码页面配置 |
+| 44 | `miniprogram/projects/repair/pages/my/password/my_password.wxml` | 新增设置密码页面模板 |
+| 45 | `miniprogram/projects/repair/pages/my/password/my_password.wxss` | 新增设置密码页面样式 |
+| 46 | `miniprogram/projects/repair/pages/my/edit/user_form.wxml` | 注册表单新增密码字段 |
+| 47 | `miniprogram/comm/biz/passport_biz.js` | 退出登录时清除列表缓存 |
+| 48 | `miniprogram/projects/repair/pages/task/my_list/task_my_list.js` | isLogin默认为false，onShow检查登录状态，筛选菜单更新 |
+| 49 | `miniprogram/projects/repair/pages/task/index/task_index.js` | isLogin默认为false，onShow检查登录状态 |
+| 50 | `cloudfunctions/mcloud/project/repair/service/passport_service.js` | 用户账号体系重构，移除微信自动绑定 |
+| 51 | `cloudfunctions/mcloud/project/repair/controller/passport_controller.js` | 控制器适配新的用户标识逻辑 |
+| 52 | `miniprogram/projects/repair/pages/my/edit/user_form.wxml` | 移除微信获取手机号按钮 |
+| 53 | `miniprogram/projects/repair/pages/my/edit/my_edit.js` | mobileCheck设为false |
+| 54 | `miniprogram/projects/repair/pages/my/reg/my_reg.js` | mobileCheck设为false |
+| 55 | `cloudfunctions/mcloud/project/repair/model/task_model.js` | 新增报价字段、取消状态 |
+| 56 | `cloudfunctions/mcloud/project/repair/controller/work/work_task_controller.js` | 新增报价接口 |
+| 57 | `cloudfunctions/mcloud/project/repair/controller/task_controller.js` | 新增确认/取消报价接口 |
+| 58 | `miniprogram/projects/repair/pages/work/task/quote/work_task_quote.js` | 新增报价页面逻辑 |
+| 59 | `miniprogram/projects/repair/pages/work/task/quote/work_task_quote.json` | 新增报价页面配置 |
+| 60 | `miniprogram/projects/repair/pages/work/task/quote/work_task_quote.wxml` | 新增报价页面模板 |
+| 61 | `miniprogram/projects/repair/pages/work/task/quote/work_task_quote.wxss` | 新增报价页面样式 |
+| 62 | `miniprogram/projects/repair/pages/work/task/list/work_task_list.js` | 筛选菜单更新 |
+| 63 | `miniprogram/projects/repair/pages/work/task/detail/work_task_detail.wxml` | 操作按钮根据状态显示 |
+| 64 | `miniprogram/projects/repair/pages/task/my_list/task_my_list.wxml` | 状态显示更新 |
+| 65 | `miniprogram/projects/repair/pages/task/edit/task_edit.wxml` | 报价信息显示、确认/取消按钮 |
+| 66 | `miniprogram/projects/repair/pages/task/edit/task_edit.js` | 确认/取消报价逻辑 |
+| 67 | `miniprogram/projects/repair/pages/admin/task/list/task_list_inc.wxml` | 状态显示更新 |
+| 68 | `miniprogram/projects/repair/pages/admin/task/detail/task_detail_inc.wxml` | 状态显示更新 |
+
+---
+
 *文档创建时间: 2026-02-20*  
-*最后更新时间: 2026-02-23*
+*最后更新时间: 2026-02-22*

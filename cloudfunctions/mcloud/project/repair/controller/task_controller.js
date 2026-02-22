@@ -11,6 +11,34 @@ const timeUtil = require('../../../framework/utils/time_util.js');
 
 class TaskController extends BaseProjectController {
 
+	async confirmQuote() {
+
+		// 数据校验
+		let rules = {
+			id: 'must|id',
+		};
+
+		// 取得数据
+		let input = this.validateData(rules);
+
+		let service = new TaskService();
+		return await service.confirmQuote(input.id);
+	}
+
+	async cancelQuote() {
+
+		// 数据校验
+		let rules = {
+			id: 'must|id',
+		};
+
+		// 取得数据
+		let input = this.validateData(rules);
+
+		let service = new TaskService();
+		return await service.cancelQuote(input.id);
+	}
+
 	async commentTask() {
 
 		// 数据校验

@@ -42,6 +42,7 @@
 		"projects/repair/pages/work/index/login/work_login",
 		"projects/repair/pages/work/index/pwd/work_pwd",
 		"projects/repair/pages/work/task/list/work_task_list",
+		"projects/repair/pages/work/task/quote/work_task_quote",
 		"projects/repair/pages/work/task/run/work_task_run",
 		"projects/repair/pages/work/task/detail/work_task_detail",
 		"projects/repair/pages/work/task/over/work_task_over",

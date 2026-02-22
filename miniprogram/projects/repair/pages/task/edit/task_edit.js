@@ -77,6 +77,63 @@ Page({
 		pageHelper.url(e, this);
 	},
 
+	bindConfirmQuote: async function (e) {
+		let that = this;
+		wx.showModal({
+			title: '提示',
+			content: '确认接受此报价并开始维修吗？',
+			success: async function (res) {
+				if (res.confirm) {
+					try {
+						let params = {
+							id: that.data.id
+						};
+						await cloudHelper.callCloudSumbit('task/confirm_quote', params);
+
+						let cb = () => {
+							let node = {
+								'TASK_STATUS': 3
+							};
+							pageHelper.modifyPrevPageListNodeObject(that.data.id, node);
+							TaskBiz.loadDetail(that);
+						};
+						pageHelper.showNoneToast('确认成功', 2000, cb);
+					} catch (err) {
+						console.log(err);
+					}
+				}
+			}
+		});
+	},
+
+	bindCancelQuote: async function (e) {
+		let that = this;
+		wx.showModal({
+			title: '提示',
+			content: '确认取消维修吗？取消后订单将变为已取消状态。',
+			success: async function (res) {
+				if (res.confirm) {
+					try {
+						let params = {
+							id: that.data.id
+						};
+						await cloudHelper.callCloudSumbit('task/cancel_quote', params);
+
+						let cb = () => {
+							let node = {
+								'TASK_STATUS': 10
+							};
+							pageHelper.modifyPrevPageListNodeObject(that.data.id, node);
+							TaskBiz.loadDetail(that);
+						};
+						pageHelper.showNoneToast('已取消', 2000, cb);
+					} catch (err) {
+						console.log(err);
+					}
+				}
+			}
+		});
+	},
 
 	bindCheckTap: async function (e) {
 		this.selectComponent("#task-form-show").checkForms();

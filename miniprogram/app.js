@@ -19,6 +19,9 @@ App({
 
 		this.globalData = {};
 
+		// 清除退出登录标记（每次启动都尝试自动登录）
+		cacheHelper.remove(constants.CACHE_LOGOUT_FLAG);
+
 		// 用于自定义导航栏
 		try {
 			const systemInfo = wx.getWindowInfo();
@@ -83,6 +86,7 @@ App({
 						resolve(res.result);
 					},
 					fail: (err) => {
+						console.error('云函数调用失败:', err);
 						reject(err);
 					}
 				});
@@ -90,11 +94,22 @@ App({
 			
 			console.log('自动登录结果:', res);
 			
-			if (!res || !res.data) {
+			if (!res) {
 				console.log('无返回数据');
 				return;
 			}
+			
+			// 处理错误返回
+			if (res.ret && res.ret.errCode !== 0) {
+				console.log('自动登录返回错误:', res.ret.msg);
+				return;
+			}
+			
 			let data = res.data;
+			if (!data) {
+				console.log('无data数据');
+				return;
+			}
 			console.log('角色:', data.role);
 
 			if (data.role === 'admin') {
@@ -122,21 +137,20 @@ App({
 					url: '/projects/repair/pages/work/index/home/work_home',
 				});
 			} else if (data.role === 'user') {
-			console.log('自动登录用户');
-			cacheHelper.set(constants.CACHE_TOKEN, {
-				id: data.id,
-				key: data.key,
-				name: data.name,
-				mobile: data.mobile,
-				status: data.status
-			}, constants.TOKEN_EXPIRE);
-		} else if (data.role === 'user_select') {
-			console.log('用户有多个账号，需要选择');
-			// 多账号情况，存储账号列表，跳转到登录页让用户选择
-			cacheHelper.set('CACHE_MULTI_ACCOUNTS', data.accounts, 3600);
-		} else {
-			console.log('未绑定任何账号');
-		}
+				console.log('自动登录用户');
+				cacheHelper.set(constants.CACHE_TOKEN, {
+					id: data.id,
+					key: data.key,
+					name: data.name,
+					mobile: data.mobile,
+					status: data.status
+				}, constants.TOKEN_EXPIRE);
+			} else if (data.role === 'user_select') {
+				console.log('用户有多个账号，需要选择');
+				cacheHelper.set('CACHE_MULTI_ACCOUNTS', data.accounts, 3600);
+			} else {
+				console.log('未绑定任何账号');
+			}
 		} catch (err) {
 			console.log('自动登录检查错误:', err);
 		}

@@ -10,8 +10,10 @@
 			<view class="item card-project shadow-project" wx:for="{{dataList.list}}" wx:key="index">
 				<view wx:if="{{item.TASK_STATUS==0}}" class="status-right-top bg-orange">待派工</view>
 				<view wx:elif="{{item.TASK_STATUS==1}}" class="status-right-top bg-red">已派工，待处理</view>
-				<view wx:elif="{{item.TASK_STATUS==2}}" class="status-right-top bg-blue">处理中</view>
+				<view wx:elif="{{item.TASK_STATUS==2}}" class="status-right-top bg-yellow">待您确认报价</view>
+				<view wx:elif="{{item.TASK_STATUS==3}}" class="status-right-top bg-blue">处理中</view>
 				<view wx:elif="{{item.TASK_STATUS==9}}" class="status-right-top bg-green">已完成</view>
+				<view wx:elif="{{item.TASK_STATUS==10}}" class="status-right-top bg-grey">已取消</view>
 
 				<view class="title"><image src="../../../images/repair.png" />{{item.TASK_OBJ.type}}</view>
 

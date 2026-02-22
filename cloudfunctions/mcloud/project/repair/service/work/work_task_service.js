@@ -90,6 +90,19 @@ class WorkTaskService extends BaseProjectWorkService {
 		return result;
 	}
 
+	async quoteWorkTask(id, forms) {
+		let where = {
+			_id: id
+		};
+		let data = {};
+		data.TASK_STATUS = TaskModel.STATUS.QUOTE;
+		data.TASK_QUOTE_FORMS = forms;
+		data.TASK_QUOTE_OBJ = dataUtil.dbForms2Obj(forms);
+		data.TASK_QUOTE_TIME = timeUtil.time();
+		data.TASK_QUOTE_CONFIRM = TaskModel.QUOTE_CONFIRM.PENDING;
+		await TaskModel.edit(where, data);
+	}
+
 	async runWorkTask(id, forms) {
 		let where = {
 			_id: id

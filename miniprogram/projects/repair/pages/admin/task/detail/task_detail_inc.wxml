@@ -9,12 +9,20 @@
 				<text class="txt">已派工，待处理</text>
 			</block>
 			<block wx:elif="{{task.TASK_STATUS==2}}">
+				<text class="icn icon-warnfill"></text>
+				<text class="txt">待用户确认报价</text>
+			</block>
+			<block wx:elif="{{task.TASK_STATUS==3}}">
 				<text class="icn icon-repairfill"></text>
 				<text class="txt">工作人员处理中...</text>
 			</block>
 			<block wx:elif="{{task.TASK_STATUS==9}}">
 				<text class="icn icon-roundcheckfill"></text>
 				<text class="txt">已完成</text>
+			</block>
+			<block wx:elif="{{task.TASK_STATUS==10}}">
+				<text class="icn icon-closefill"></text>
+				<text class="txt">已取消</text>
 			</block>
 		</view>
 
@@ -38,12 +46,19 @@
 					<text wx:if="{{task.TASK_STATUS>=2}}" class="check icon-roundcheckfill status"></text>
 					<text wx:else class="status num">3</text>
 				</view>
+				<view class="txt">确认报价</view>
+			</view>
+			<view class="item">
+				<view class="status">
+					<text wx:if="{{task.TASK_STATUS>=3}}" class="check icon-roundcheckfill status"></text>
+					<text wx:else class="status num">4</text>
+				</view>
 				<view class="txt">处理中</view>
 			</view>
 			<view class="item">
 				<view class="status">
 					<text wx:if="{{task.TASK_STATUS>=9}}" class="check icon-roundcheckfill status"></text>
-					<text wx:else class="status num">4</text>
+					<text wx:else class="status num">5</text>
 				</view>
 				<view class="txt">已完成</view>
 			</view>

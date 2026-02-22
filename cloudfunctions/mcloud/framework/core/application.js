@@ -85,7 +85,8 @@ async function app(event, context) {
 		if (config.TEST_MODE)
 			openId = config.TEST_TOKEN_ID; 
 
-		if (!openId && r != 'job/timer') {
+		// openId为空时的处理：自动登录检查接口允许无openId
+		if (!openId && r != 'job/timer' && r != 'passport/auto_login_check') {
 			console.error('OPENID is unfined');
 			return appUtil.handlerSvrErr();
 		}

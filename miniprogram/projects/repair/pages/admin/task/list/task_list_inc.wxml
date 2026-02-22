@@ -10,8 +10,10 @@
 		</view>
 		<view wx:if="{{item.TASK_STATUS==0}}" class="status bg-orange light">待派工</view>
 		<view wx:elif="{{item.TASK_STATUS==1}}" class="status bg-red light">已派工，待处理</view>
-		<view wx:elif="{{item.TASK_STATUS==2}}" class="status bg-blue light">处理中</view>
+		<view wx:elif="{{item.TASK_STATUS==2}}" class="status bg-yellow light">待用户确认</view>
+		<view wx:elif="{{item.TASK_STATUS==3}}" class="status bg-blue light">处理中</view>
 		<view wx:elif="{{item.TASK_STATUS==9}}" class="status bg-green light">已完成</view>
+		<view wx:elif="{{item.TASK_STATUS==10}}" class="status bg-grey light">已取消</view>
 
 		<view class="inner">
 
@@ -43,8 +45,8 @@
 		</view>
 		<view class="oprt" wx:elif="{{isWork}}">
 			<view bindtap="url" data-url="../detail/work_task_detail?id={{item._id}}">查看详情</view>
-			<view bindtap="url" data-url="../run/work_task_run?id={{item._id}}">设为处理中</view>
-			<view bindtap="url" data-url="../over/work_task_over?id={{item._id}}">设为完成</view>
+			<view wx:if="{{item.TASK_STATUS==1}}" bindtap="url" data-url="../quote/work_task_quote?id={{item._id}}">提交报价</view>
+			<view wx:if="{{item.TASK_STATUS==3}}" bindtap="url" data-url="../over/work_task_over?id={{item._id}}">设为完成</view>
 
 		</view>
 	</view>

@@ -105,6 +105,8 @@ module.exports = {
 	'task/task_update_forms': 'task_controller@updateTaskForms',
 	'task/comment_update_forms': 'task_controller@updateTaskCommentForms',
 	'task/comment': 'task_controller@commentTask',
+	'task/confirm_quote': 'task_controller@confirmQuote',
+	'task/cancel_quote': 'task_controller@cancelQuote',
 
 	'admin/task_appt_member': 'admin/admin_task_controller@apptTaskMember',
 	'admin/task_list': 'admin/admin_task_controller@getAdminTaskList',
@@ -123,8 +125,10 @@ module.exports = {
 	'work/task_detail': 'work/work_task_controller@getWorkTaskDetail',
 	'work/task_status': 'work/work_task_controller@statusWorkTask#demo',
 
+	'work/task_quote': 'work/work_task_controller@quoteWorkTask',
 	'work/task_run': 'work/work_task_controller@runWorkTask',
 	'work/task_over': 'work/work_task_controller@overWorkTask',
+	'work/task_update_quote_forms': 'work/work_task_controller@updateWorkQuoteTaskForms',
 	'work/task_update_run_forms': 'work/work_task_controller@updateWorkRunTaskForms',
 	'work/task_update_over_forms': 'work/work_task_controller@updateWorkOverTaskForms',
 

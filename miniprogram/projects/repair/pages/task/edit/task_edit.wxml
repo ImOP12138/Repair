@@ -14,12 +14,20 @@
 				<text class="txt">已派工，待处理</text>
 			</block>
 			<block wx:elif="{{task.TASK_STATUS==2}}">
+				<text class="icn icon-warnfill"></text>
+				<text class="txt">待您确认报价</text>
+			</block>
+			<block wx:elif="{{task.TASK_STATUS==3}}">
 				<text class="icn icon-repairfill"></text>
 				<text class="txt">工作人员处理中...</text>
 			</block>
 			<block wx:elif="{{task.TASK_STATUS==9}}">
 				<text class="icn icon-roundcheckfill"></text>
 				<text class="txt">已完成</text>
+			</block>
+			<block wx:elif="{{task.TASK_STATUS==10}}">
+				<text class="icn icon-closefill"></text>
+				<text class="txt">已取消</text>
 			</block>
 		</view>
 
@@ -43,12 +51,19 @@
 					<text wx:if="{{task.TASK_STATUS>=2}}" class="check icon-roundcheckfill status"></text>
 					<text wx:else class="status num">3</text>
 				</view>
+				<view class="txt">确认报价</view>
+			</view>
+			<view class="item">
+				<view class="status">
+					<text wx:if="{{task.TASK_STATUS>=3}}" class="check icon-roundcheckfill status"></text>
+					<text wx:else class="status num">4</text>
+				</view>
 				<view class="txt">处理中</view>
 			</view>
 			<view class="item">
 				<view class="status">
 					<text wx:if="{{task.TASK_STATUS>=9}}" class="check icon-roundcheckfill status"></text>
-					<text wx:else class="status num">4</text>
+					<text wx:else class="status num">5</text>
 				</view>
 				<view class="txt">已完成</view>
 			</view>
@@ -70,6 +85,53 @@
 			</view>
 			<!-- form content end -->
 
+		</view>
+
+		<view wx:if="{{task.TASK_STATUS>=2 && task.TASK_QUOTE_OBJ && task.TASK_QUOTE_OBJ.chargeDesc}}" class="form-box card-project shadow-project margin-top">
+			<view class="title text-bold">维修报价信息</view>
+			<view class="item">
+				<view class="title">收费情况说明</view>
+				<view class="detail">{{task.TASK_QUOTE_OBJ.chargeDesc}}</view>
+			</view>
+			<view class="item">
+				<view class="title">收费金额</view>
+				<view class="detail text-red text-bold text-xl">{{task.TASK_QUOTE_OBJ.chargeAmount}} 元</view>
+			</view>
+			<view wx:if="{{task.TASK_QUOTE_OBJ.content}}" class="item">
+				<view class="title">其他说明</view>
+				<view class="detail">{{task.TASK_QUOTE_OBJ.content}}</view>
+			</view>
+			<view wx:if="{{task.TASK_QUOTE_OBJ.img && task.TASK_QUOTE_OBJ.img.length>0}}" class="item">
+				<view class="title">相关图片</view>
+				<view class="detail">
+					<view class="pic" wx:for="{{task.TASK_QUOTE_OBJ.img}}" wx:for-item="imgItem" wx:key="key1" bindtap="url" data-type="image" data-url="{{imgItem}}">
+						<text class="no">{{index+1}}</text>
+						<image src="{{imgItem}}" mode="aspectFill" class="loading" show-menu-by-longpress="{{true}}" />
+					</view>
+				</view>
+			</view>
+		</view>
+
+		<view wx:if="{{task.TASK_STATUS>=3 && task.TASK_OVER_OBJ && task.TASK_OVER_OBJ.content}}" class="form-box card-project shadow-project margin-top">
+			<view class="title text-bold">维修完成信息</view>
+			<view class="item">
+				<view class="title">完成情况说明</view>
+				<view class="detail">{{task.TASK_OVER_OBJ.content}}</view>
+			</view>
+			<view wx:if="{{task.TASK_OVER_OBJ.img && task.TASK_OVER_OBJ.img.length>0}}" class="item">
+				<view class="title">相关图片</view>
+				<view class="detail">
+					<view class="pic" wx:for="{{task.TASK_OVER_OBJ.img}}" wx:for-item="imgItem" wx:key="key1" bindtap="url" data-type="image" data-url="{{imgItem}}">
+						<text class="no">{{index+1}}</text>
+						<image src="{{imgItem}}" mode="aspectFill" class="loading" show-menu-by-longpress="{{true}}" />
+					</view>
+				</view>
+			</view>
+		</view>
+
+		<view wx:if="{{task.TASK_STATUS===2}}">
+			<button bindtap="bindConfirmQuote" class="btn-base btn-project shadow" style="margin-bottom:20rpx;">确认维修</button>
+			<button bindtap="bindCancelQuote" class="btn-base bg-grey shadow" style="margin-bottom:100rpx;">取消维修</button>
 		</view>
 
 		<button wx:if="{{!task||task.TASK_STATUS===0}}" bindtap="bindCheckTap" class="btn-base btn-project shadow" style="margin-bottom:100rpx;">提交</button>

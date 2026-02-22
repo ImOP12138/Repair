@@ -113,7 +113,8 @@ Page({
 		let sortMenus = [
 			{ label: '全部', type: 'status', value: '99' }, 
 			{ label: '待处理', type: 'status', value: '1' },
-			{ label: '处理中', type: 'status', value: '2' },
+			{ label: '待确认', type: 'status', value: '2' },
+			{ label: '处理中', type: 'status', value: '3' },
 			{ label: '已完成', type: 'status', value: '9' },
 		];
 
