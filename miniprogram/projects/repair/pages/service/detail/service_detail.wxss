@@ -1,0 +1,215 @@
+@import "../../../style/skin.wxss";
+
+page {
+    background-color: #f5f5f5;
+    padding-bottom: 140rpx;
+}
+
+.main {
+    padding: 20rpx;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #0055BE, #3a7bd5);
+    border-radius: 20rpx;
+    padding: 40rpx 30rpx;
+    margin-bottom: 20rpx;
+}
+
+.header-icon {
+    width: 120rpx;
+    height: 120rpx;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 20rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60rpx;
+    margin-right: 30rpx;
+}
+
+.header-info {
+    flex: 1;
+}
+
+.header-info .title {
+    font-size: 40rpx;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 10rpx;
+}
+
+.header-info .desc {
+    font-size: 26rpx;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.section {
+    background-color: #fff;
+    border-radius: 20rpx;
+    padding: 30rpx;
+    margin-bottom: 20rpx;
+}
+
+.section-title {
+    font-size: 32rpx;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 25rpx;
+    display: flex;
+    align-items: center;
+}
+
+.section-title .icon {
+    margin-right: 10rpx;
+    font-size: 36rpx;
+}
+
+.price-card {
+    background: linear-gradient(135deg, #fff9e6, #fff3cc);
+    border-radius: 15rpx;
+    padding: 20rpx;
+}
+
+.price-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15rpx 0;
+    border-bottom: 1rpx dashed #e0d5b8;
+}
+
+.price-item:last-child {
+    border-bottom: none;
+}
+
+.price-name {
+    font-size: 28rpx;
+    color: #666;
+}
+
+.price-val {
+    font-size: 30rpx;
+    font-weight: bold;
+    color: #ff6600;
+}
+
+.content-list {
+    padding-left: 10rpx;
+}
+
+.content-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15rpx;
+    font-size: 28rpx;
+    color: #555;
+    line-height: 1.6;
+}
+
+.content-item .dot {
+    color: #0055BE;
+    margin-right: 10rpx;
+    font-weight: bold;
+}
+
+.standard-list {
+    padding-left: 10rpx;
+}
+
+.standard-item {
+    margin-bottom: 20rpx;
+    padding-bottom: 20rpx;
+    border-bottom: 1rpx solid #eee;
+}
+
+.standard-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.standard-title {
+    font-size: 28rpx;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8rpx;
+}
+
+.standard-desc {
+    font-size: 26rpx;
+    color: #666;
+    line-height: 1.5;
+}
+
+.tips-content {
+    font-size: 26rpx;
+    color: #888;
+    line-height: 1.6;
+    padding: 20rpx;
+    background-color: #fffbe6;
+    border-radius: 10rpx;
+    border-left: 6rpx solid #ffcc00;
+}
+
+.footer-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    background-color: #fff;
+    padding: 20rpx 30rpx;
+    padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+    box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.1);
+    z-index: 999;
+}
+
+.contact-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80rpx;
+    border: 2rpx solid #0055BE;
+    border-radius: 40rpx;
+    margin-right: 20rpx;
+    font-size: 28rpx;
+    color: #0055BE;
+    background-color: #fff;
+}
+
+.contact-btn:active {
+    background-color: #f5f5f5;
+}
+
+.contact-btn .icon {
+    margin-right: 8rpx;
+}
+
+.order-btn {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80rpx;
+    background: linear-gradient(135deg, #0055BE, #3a7bd5);
+    border-radius: 40rpx;
+    font-size: 30rpx;
+    font-weight: bold;
+    color: #fff;
+}
+
+.order-btn:active {
+    opacity: 0.8;
+}
+
+.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: #999;
+}

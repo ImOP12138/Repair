@@ -1,0 +1,90 @@
+@import "../../../style/skin.wxss";
+
+page {
+    background-color: #f5f5f5 !important;
+}
+
+.main {
+    padding: 0;
+    background-color: #f5f5f5 !important;
+}
+
+.top {
+    width: 100%;
+}
+
+.top image {
+    width: 100%;
+}
+
+.box {
+    width: 100%;
+    padding: 30rpx 20rpx 20rpx;
+    border-top-right-radius: 45rpx;
+    border-top-left-radius: 45rpx;
+    margin-top: -140rpx;
+    position: relative;
+    background-color: #f5f5f5;
+}
+
+.box-title {
+    font-size: 36rpx;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 25rpx;
+    padding-left: 10rpx;
+}
+
+.box .inner {
+    width: 100%;
+}
+
+.box .inner .item {
+    width: 100%;
+    background-color: #fff;
+    border-radius: 20rpx;
+    margin-bottom: 20rpx;
+    padding: 30rpx;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+
+.item-icon {
+    width: 100rpx;
+    height: 100rpx;
+    background: linear-gradient(135deg, #0055BE, #3a7bd5);
+    border-radius: 20rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 50rpx;
+    margin-right: 25rpx;
+    flex-shrink: 0;
+}
+
+.item-info {
+    flex: 1;
+    overflow: hidden;
+}
+
+.item-title {
+    font-size: 32rpx;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8rpx;
+}
+
+.item-desc {
+    font-size: 24rpx;
+    color: #999;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.item-arrow {
+    font-size: 40rpx;
+    color: #ccc;
+    margin-left: 15rpx;
+}

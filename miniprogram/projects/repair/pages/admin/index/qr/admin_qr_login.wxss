@@ -1,0 +1,86 @@
+.main {
+    padding: 30rpx;
+}
+
+.section {
+    background: #fff;
+    border-radius: 16rpx;
+    padding: 40rpx;
+    margin-bottom: 30rpx;
+}
+
+.title {
+    font-size: 36rpx;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20rpx;
+}
+
+.desc {
+    font-size: 28rpx;
+    color: #666;
+    margin-bottom: 30rpx;
+    line-height: 1.6;
+}
+
+.btn-create {
+    background: #0055BE;
+    color: #fff;
+    border-radius: 50rpx;
+    font-size: 32rpx;
+}
+
+.code-section {
+    background: #fff;
+    border-radius: 16rpx;
+    padding: 40rpx;
+    margin-bottom: 30rpx;
+    text-align: center;
+}
+
+.code-box {
+    background: #f5f5f5;
+    border-radius: 16rpx;
+    padding: 40rpx;
+    margin-bottom: 20rpx;
+}
+
+.code-text {
+    font-size: 60rpx;
+    font-weight: bold;
+    color: #0055BE;
+    letter-spacing: 10rpx;
+}
+
+.countdown {
+    font-size: 28rpx;
+    color: #ff6b6b;
+    margin-bottom: 20rpx;
+}
+
+.btn-copy {
+    background: #f5f5f5;
+    color: #333;
+    border-radius: 50rpx;
+    font-size: 28rpx;
+    width: 300rpx;
+}
+
+.tips {
+    background: #fff8e6;
+    border-radius: 16rpx;
+    padding: 30rpx;
+}
+
+.tips-title {
+    font-size: 30rpx;
+    font-weight: bold;
+    color: #e6a23c;
+    margin-bottom: 20rpx;
+}
+
+.tips-item {
+    font-size: 26rpx;
+    color: #666;
+    line-height: 2;
+}

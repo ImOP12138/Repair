@@ -1,0 +1,56 @@
+<view class="main">
+	<view class="login-header">
+		<image class="login-logo" src="../../../images/tabbar/my_cur.png" mode="aspectFit"></image>
+		<view class="login-title">用户登录</view>
+		<view class="login-desc">请输入账号密码登录</view>
+	</view>
+
+	<view class="login-form">
+		<!-- 验证码登录功能暂时隐藏
+		<view class="login-type-switch">
+			<view class="switch-btn {{loginType==='password'?'active':''}}" bindtap="switchLoginType" data-type="password">密码登录</view>
+			<view class="switch-btn {{loginType==='sms'?'active':''}}" bindtap="switchLoginType" data-type="sms">验证码登录</view>
+		</view>
+		-->
+
+		<view class="input-group">
+			<view class="input-item">
+				<text class="input-icon icon-mobile"></text>
+				<input class="input-field" type="number" maxlength="11" placeholder="请输入手机号" bindinput="bindMobileInput" value="{{mobile}}" />
+			</view>
+
+			<view class="input-item">
+				<text class="input-icon icon-lock"></text>
+				<input class="input-field" password="true" placeholder="请输入密码(至少6位)" bindinput="bindPasswordInput" value="{{password}}" />
+			</view>
+
+			<!-- 验证码输入框暂时隐藏
+			<block wx:if="{{loginType==='sms'}}">
+				<view class="input-item">
+					<text class="input-icon icon-lock"></text>
+					<input class="input-field" type="number" maxlength="6" placeholder="请输入6位验证码" bindinput="bindCodeInput" value="{{code}}" />
+					<view class="send-code-btn {{sending?'disabled':''}}" bindtap="sendCode">{{sendText}}</view>
+				</view>
+			</block>
+			-->
+		</view>
+
+		<button class="btn-login" bindtap="bindLoginTap">
+			<text>登录</text>
+		</button>
+
+		<view class="login-divider">
+			<view class="line"></view>
+			<text>或</text>
+			<view class="line"></view>
+		</view>
+
+		<button class="btn-reg" bindtap="bindRegTap">
+			<text>新用户注册</text>
+		</button>
+	</view>
+
+	<view class="login-footer">
+		<view bindtap="bindBackTap" class="back-link"><text class="icon-back"></text>返回首页</view>
+	</view>
+</view>

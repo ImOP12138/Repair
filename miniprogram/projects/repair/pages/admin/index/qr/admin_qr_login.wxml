@@ -1,0 +1,25 @@
+<view class="main">
+    <view class="section">
+        <view class="title">生成登录码</view>
+        <view class="desc">点击按钮生成临时登录码，用户端扫码后即可登录后台</view>
+        
+        <button class="btn-create" bindtap="bindCreateCodeTap">生成登录码</button>
+    </view>
+
+    <view wx:if="{{code}}" class="code-section">
+        <view class="code-box">
+            <text class="code-text">{{code}}</text>
+        </view>
+        <view class="countdown">有效期: {{countdown}}秒</view>
+        <button class="btn-copy" bindtap="bindCopyCodeTap">复制登录码</button>
+    </view>
+
+    <view class="tips">
+        <view class="tips-title">使用说明：</view>
+        <view class="tips-item">1. 点击"生成登录码"获取8位临时登录码</view>
+        <view class="tips-item">2. 将登录码告知需要登录的用户</view>
+        <view class="tips-item">3. 用户在"我的"页面连续点击5次版本号</view>
+        <view class="tips-item">4. 选择"扫码登录后台"，输入登录码</view>
+        <view class="tips-item">5. 登录码5分钟内有效</view>
+    </view>
+</view>

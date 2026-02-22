@@ -1,0 +1,68 @@
+<view class="main" wx:if="{{service}}">
+    <view class="header">
+        <view class="header-icon">{{service.icon}}</view>
+        <view class="header-info">
+            <view class="title">{{service.title}}</view>
+            <view class="desc">{{service.desc}}</view>
+        </view>
+    </view>
+
+    <view class="section">
+        <view class="section-title">
+            <text class="icon">💰</text>
+            服务价格
+        </view>
+        <view class="price-card">
+            <view class="price-item" wx:for="{{service.prices}}" wx:key="name">
+                <view class="price-name">{{item.name}}</view>
+                <view class="price-val">{{item.price}}</view>
+            </view>
+        </view>
+    </view>
+
+    <view class="section">
+        <view class="section-title">
+            <text class="icon">📋</text>
+            服务内容
+        </view>
+        <view class="content-list">
+            <view class="content-item" wx:for="{{service.contents}}" wx:key="*this">
+                <text class="dot">•</text>
+                <text>{{item}}</text>
+            </view>
+        </view>
+    </view>
+
+    <view class="section">
+        <view class="section-title">
+            <text class="icon">📏</text>
+            收费标准
+        </view>
+        <view class="standard-list">
+            <view class="standard-item" wx:for="{{service.standards}}" wx:key="title">
+                <view class="standard-title">{{item.title}}</view>
+                <view class="standard-desc">{{item.desc}}</view>
+            </view>
+        </view>
+    </view>
+
+    <view class="section" wx:if="{{service.tips}}">
+        <view class="section-title">
+            <text class="icon">💡</text>
+            温馨提示
+        </view>
+        <view class="tips-content">{{service.tips}}</view>
+    </view>
+
+    <view class="footer-bar">
+        <view class="contact-btn" bindtap="url" data-url="../../my/index/my_index">
+            <text class="icon">📞</text>
+            联系客服
+        </view>
+        <view class="order-btn" bindtap="bindOrderTap">立即预约</view>
+    </view>
+</view>
+
+<view class="empty" wx:else>
+    <text>服务信息加载中...</text>
+</view>
